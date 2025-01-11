@@ -1,33 +1,54 @@
 class MinStack {
 public:
  
-    //take pair<int,int> ---> the second int will track minimum..... t.c. O(1) s.c->O(2n)
-  
+   //approach 2: having S.C. 0(n) T.C O(1)
     MinStack() {
         
     }
-    stack<pair<int,int>>st;
-
-    void push(int val) {
-      if(st.empty()){
-        st.push({val,val});
-      }    
-      else{
-        st.push({val,min(val,st.top().second)});
-      }
-
+    stack<long long int>st;
+    long long int mini=INT_MAX;
+    void push(long long int val) {
+        if(st.empty()){
+            st.push(val);
+            mini=val;
+        }
+        else{
+            if(val>mini){
+                st.push(val);
+            }
+            else{
+                st.push(2*val-mini);   //we do this bcoz after this if we have to going to pop
+                mini=val;
+            }
+        }
     }
     
     void pop() {
-        st.pop();
+        if(!st.empty()){
+            long long int x=st.top();
+            st.pop();
+
+            //update the mini
+            if(x<mini){
+                mini=mini*2-x;
+            }
+        }
     }
     
     int top() {
-        return st.top().first;
+        if(st.empty()) return -1;
+        
+       long long int x=st.top();
+        if(x>mini){
+            return x;
+        }
+        else{
+            return mini;
+        }
     }
     
     int getMin() {
-        return st.top().second;
+        return mini;
     }
 };
 
